@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>منظومة روضة الزهور — واجهة تجريبية</title>
+  <style>
+    :root{
+      --bg:#f6fbf7;
+      --card:#ffffff;
+      --primary:#88c18a; /* soft green */
+      --accent:#ffdca8; /* soft peach */
+      --muted:#6b6b6b;
+      --shadow: 0 6px 18px rgba(20,30,20,0.08);
+      --radius:12px;
+      font-family: "Segoe UI", "Noto Sans Arabic", "Tahoma", sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: linear-gradient(180deg, var(--bg), #f0f6f2);
+      color:#123;
+      -webkit-font-smoothing:antialiased;
+      direction:rtl;
+      font-size:16px;
+    }
+    .container{
+      max-width:1100px;
+      margin:28px auto;
+      padding:20px;
+    }
+
+    /* Card */
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    /* Login */
+    .login-wrap{
+      display:flex;
+      gap:24px;
+      align-items:center;
+      justify-content:center;
+      min-height:70vh;
+    }
+    .brand{
+      width:320px;
+      text-align:center;
+      padding:18px;
+    }
+    .brand svg{width:140px;height:auto}
+    .login-card{width:420px}
+    .login-card h2{
+      margin:0 0 8px 0;
+      font-size:22px;
+      color:var(--primary);
+    }
+    .form-row{margin:12px 0}
+    label{display:block;margin-bottom:6px;color:var(--muted)}
+    input[type="text"], input[type="password"], select{
+      width:100%;
+      padding:12px 14px;
+      border:1px solid #e6efe8;
+      border-radius:10px;
+      background:#fbfff9;
+      outline:none;
+      font-size:15px;
+    }
+    .btn{
+      display:inline-block;
+      background:var(--primary);
+      color:#fff;
+      border:none;
+      padding:12px 18px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow:0 6px 12px rgba(136,193,138,0.18);
+    }
+
+    /* Dashboard */
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .nav{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .nav button{background:transparent;border:none;padding:10px 14px;border-radius:10px;cursor:pointer}
+    .nav button.active{background:var(--primary);color:#fff}
+    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .tile{
+      padding:14px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfff9);
+      border:1px solid #eef7ec;
+    }
+    .tile h3{margin:0 0 6px 0;color:var(--muted);font-size:14px}
+    .tile p{margin:0;font-size:20px;font-weight:700;color:#1a6b37}
+
+    /* Data entry */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    textarea{width:100%;min-height:120px;padding:12px;border-radius:10px;border:1px solid #e8f0ea;background:#fbfff9}
+
+    /* Small helpers */
+    .muted{color:var(--muted);font-size:14px}
+    .logo-small{display:inline-flex;align-items:center;gap:8px}
+    footer{margin-top:28px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .login-wrap{flex-direction:column;padding:20px}
+      .brand{width:100%}
+      .login-card{width:100%}
+      .summary{grid-template-columns:repeat(1,1fr)}
+      .form-grid{grid-template-columns:1fr}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- LOGIN VIEW -->
+    <div id="view-login" class="card login-wrap" aria-hidden="false">
+      <div class="brand">
+        <!-- simple floral SVG -->
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffdca8"/>
+              <stop offset="1" stop-color="#88c18a"/>
+            </linearGradient>
+          </defs>
+          <circle cx="60" cy="60" r="48" fill="url(#g1)" opacity="0.95"/>
+          <g transform="translate(10,12)">
+            <g fill="#fff">
+              <path d="M40 6c6 0 10 5 10 11s-4 11-10 11-10-5-10-11 4-11 10-11zm0 2a9 9 0 100 18 9 9 0 000-18z"/>
+              <rect x="36" y="30" width="8" height="38" rx="4"/>
+            </g>
+          </g>
+        </svg>
+        <h1 style="margin:12px 0 4px 0;color:#155724;font-size:20px">منظومة روضة الزهور</h1>
+        <div class="muted">نظام إدارة الحضور والأنشطة والتواصل</div>
+      </div>
+
+      <div class="login-card card" style="max-width:480px;">
+        <h2>تسجيل الدخول</h2>
+        <div class="muted">أدخل بيانات الحساب للمتابعة</div>
+
+        <div class="form-row">
+          <label for="role">الدور</label>
+          <select id="role">
+            <option value="teacher">معلمة</option>
+            <option value="admin">إداري</option>
+            <option value="parent">ولي أمر</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="user">اسم المستخدم</label>
+          <input id="user" type="text" placeholder="مثال: hoda123">
+        </div>
+        <div class="form-row">
+          <label for="pass">كلمة المرور</label>
+          <input id="pass" type="password" placeholder="••••••••">
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center;margin-top:16px">
+          <button class="btn" onclick="goDashboard()">دخول</button>
+          <button class="btn" style="background:var(--accent);color:#5a3f1f" onclick="fillDemo()">تجربة</button>
+        </div>
+
+        <div style="margin-top:12px" class="muted">نسيت كلمة المرور؟ تواصل مع إدارة الروضة.</div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="view-dashboard" class="card" style="display:none;">
+      <div class="topbar">
+        <div class="logo-small">
+          <svg width="44" height="44" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="60" cy="60" r="54" fill="#fff" stroke="#e6f3ea" stroke-width="6"/>
+            <path d="M36 48a8 8 0 0116 0 8 8 0 01-16 0zM68 48a8 8 0 0116 0 8 8 0 01-16 0z" fill="#88c18a"/>
+          </svg>
+          <div>
+            <div style="font-weight:700">روضة الزهور</div>
+            <div class="muted" style="font-size:13px">لوحة التحكم</div>
+          </div>
+        </div>
+
+        <div class="nav" role="navigation" aria-label="القوائم">
+          <button class="active" onclick="showSection('summary')">الرئيسية</button>
+          <button onclick="showSection('students')">الطلبة</button>
+          <button onclick="showSection('attendance')">الحضور</button>
+          <button onclick="showSection('reports')">التقارير</button>
+          <button onclick="showSection('dataentry')">إدخال بيانات</button>
+        </div>
+      </div>
+
+      <div id="summary" style="margin-top:12px">
+        <div class="muted">نظرة عامة سريعة</div>
+        <div class="summary">
+          <div class="tile">
+            <h3>عدد الطلبة</h3>
+            <p id="countStudents">42</p>
+            <div class="muted" style="margin-top:8px">موزعين على 3 فصول</div>
+          </div>
+          <div class="tile">
+            <h3>الحضور اليوم</h3>
+            <p id="todayPresent">38</p>
+            <div class="muted" style="margin-top:8px">غياب: 4</div>
+          </div>
+          <div class="tile">
+            <h3>إشعارات</h3>
+            <p id="alertsCount">2</p>
+            <div class="muted" style="margin-top:8px">رسائل جديدة لأولياء الأمور</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="students" style="display:none;margin-top:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>قائمة الطلبة</h3>
+          <button class="btn" onclick="showSection('dataentry')">إضافة طالب</button>
+        </div>
+        <div style="margin-top:10px">
+          <table style="width:100%;border-collapse:collapse">
+            <thead style="text-align:right;color:var(--muted)">
+              <tr>
+                <th style="padding:10px;border-bottom:1px solid #eef7ec">اسم الطالب</th>
+                <th style="padding:10px;border-bottom:1px solid #eef7ec">تاريخ الميلاد</th>
+                <th style="padding:10px;border-bottom:1px solid #eef7ec">الفصل</th>
+                <th style="padding:10px;border-bottom:1px solid #eef7ec">ولي الأمر</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTable">
+              <tr><td style="padding:10px">ليان محمد</td><td style="padding:10px">2019-06-12</td><td style="padding:10px">فصل أ</td><td style="padding:10px">أمينة</td></tr>
+              <tr><td style="padding:10px">يوسف علي</td><td style="padding:10px">2018-11-03</td><td style="padding:10px">فصل ب</td><td style="padding:10px">سارة</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="attendance" style="display:none;margin-top:14px">
+        <h3>تسجيل الحضور</h3>
+        <div class="card" style="padding:12px">
+          <div class="muted">اختر الفصل ثم ضع علامة حضور أو غياب لكل طالب</div>
+          <div style="margin-top:10px">
+            <select style="padding:10px;border-radius:8px;border:1px solid #eef7ec">
+              <option>فصل أ</option>
+              <option>فصل ب</option>
+              <option>فصل ج</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="reports" style="display:none;margin-top:14px">
+        <h3>التقارير</h3>
+        <div class="muted">استخراج تقارير الحضور والتقييم بصيغة PDF أو Excel</div>
+      </div>
+
+      <div id="dataentry" style="display:none;margin-top:14px">
+        <h3>إدخال بيانات الطالب</h3>
+        <div class="card">
+          <form id="studentForm" onsubmit="event.preventDefault(); saveStudent();">
+            <div class="form-grid">
+              <div>
+                <label>اسم الطالب</label>
+                <input id="st_name" type="text" placeholder="مثال: ليان محمد" required>
+              </div>
+              <div>
+                <label>تاريخ الميلاد</label>
+                <input id="st_dob" type="date" required>
+              </div>
+              <div>
+                <label>الفصل</label>
+                <select id="st_class">
+                  <option>فصل أ</option>
+                  <option>فصل ب</option>
+                  <option>فصل ج</option>
+                </select>
+              </div>
+              <div>
+                <label>ولي الأمر</label>
+                <input id="st_parent" type="text" placeholder="اسم ولي الأمر" required>
+              </div>
+              <div style="grid-column:1/3">
+                <label>ملاحظات طبية أو احتياجات خاصة</label>
+                <textarea id="st_notes" placeholder="توضيح أي ملاحظات صحية أو طبية"></textarea>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;display:flex;gap:10px;justify-content:flex-start">
+              <button class="btn" type="submit">حفظ الطالب</button>
+              <button class="btn" type="button" style="background:#e6f2e9;color:#155724" onclick="resetForm()">إفراغ النموذج</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <footer class="muted">© روضة الزهور — نظام تجريبي لعرض التصميم</footer>
+    </div>
+
+  </div>
+
+<script>
+  function goDashboard(){
+    document.getElementById('view-login').style.display='none';
+    document.getElementById('view-dashboard').style.display='block';
+    showSection('summary');
+  }
+  function showSection(id){
+    const sections = ['summary','students','attendance','reports','dataentry'];
+    sections.forEach(s => {
+      document.getElementById(s).style.display = (s === id) ? 'block' : 'none';
+    });
+    // nav active
+    document.querySelectorAll('.nav button').forEach(b=>{
+      b.classList.remove('active');
+      if(b.textContent.trim() === 'الرئيسية' && id === 'summary') b.classList.add('active');
+      if(b.textContent.trim() === 'الطلبة' && id === 'students') b.classList.add('active');
+      if(b.textContent.trim() === 'الحضور' && id === 'attendance') b.classList.add('active');
+      if(b.textContent.trim() === 'التقارير' && id === 'reports') b.classList.add('active');
+      if(b.textContent.trim() === 'إدخال بيانات' && id === 'dataentry') b.classList.add('active');
+    });
+  }
+
+  function fillDemo(){
+    document.getElementById('user').value = 'admin';
+    document.getElementById('pass').value = '123456';
+  }
+
+  function saveStudent(){
+    const name = document.getElementById('st_name').value;
+    const dob = document.getElementById('st_dob').value;
+    const cls = document.getElementById('st_class').value;
+    const parent = document.getElementById('st_parent').value;
+    const tbody = document.getElementById('studentsTable');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td style="padding:10px">${name}</td><td style="padding:10px">${dob}</td><td style="padding:10px">${cls}</td><td style="padding:10px">${parent}</td>`;
+    tbody.appendChild(tr);
+    // update counters
+    const countEl = document.getElementById('countStudents');
+    countEl.textContent = parseInt(countEl.textContent) + 1;
+    alert('تم إضافة الطالب بنجاح');
+    resetForm();
+    showSection('students');
+  }
+
+  function resetForm(){
+    document.getElementById('studentForm').reset();
+  }
+</script>
+</body>
+</html>
